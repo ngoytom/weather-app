@@ -1,0 +1,45 @@
+.search{
+    margin-top: 30px;
+    margin-right: 20px;
+    text-align: right;
+}
+
+.weather-heading{
+    margin-top: 150px;
+    margin-left: 200px;
+}
+
+.description{
+    line-height: 5%;
+    font-size: 20px;
+}
+
+.location{
+    line-height: 20%;
+    font-size: 40px;
+}
+
+.weather-temperature{
+    display: inline-block;
+    margin-left: 200px;
+}
+
+.divider{
+    display: inline-block;
+    margin-left: 40px;
+}
+
+.temperature{
+    margin-top: -50px;
+    font-size: 175px;
+}
+
+.superscript{
+    font-size: 70px;
+}
+
+.weather-information{
+    margin-left: 70px;
+    display: inline-block;
+    font-size: 18px;
+}
