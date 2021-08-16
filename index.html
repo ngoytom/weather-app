@@ -6,22 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
     <div>
         <form class="search">
-            <button type="button" onclick="">Click Me!</button>
-            <input type="text" id="search-city" placeholder="Search City"><br>
+            <button type="button" class="submit-location" onclick="">Click Me!</button>
+            <input type="text" class="search-city" placeholder="Search City"><br>
         </form>
     </div>
 
     <div class="weather-heading">
-        <h3 class="description">Partly Cloudy</h3>
+        <h3 class="description">PARTLY CLOUD</h3>
         <h2 class="location">Toronto, Canada</h2>
     </div>
 
     <div class="weather-temperature">
-        <h1 class="temperature">30<sup class="superscript">°C</sup></h1>
+        <h1 class="current-temp">30<sup class="superscript">°C</sup></h1>
     </div>
 
     <div class="divider">
@@ -29,10 +30,12 @@
     </div>
 
     <div class="weather-information">
-        <h4>Feels Like: 35 <sup>°C</sup></h4>
-        <h4>Humidity: 69%</h4>
-        <h4>Chance of Rain: 4%</h4>
-        <h4>Wind: 25km/h</h4>
+        <h4 class="feels-like">Feels Like: 35 <sup>°C</sup></h4>
+        <h4 class="humidity">Humidity: 69%</h4>
+        <h4 class="chance-of-rain">Chance of Rain: 4%</h4>
+        <h4 class="wind-speed">Wind: 25 m/s</h4>
     </div>
+
+    <script src="main.js"></script>
 </body>
 </html>
