@@ -5,17 +5,23 @@
 }
 
 .weather-heading{
-    margin-top: 150px;
+    margin-left: 200px;
+}
+
+.date{
+    margin-left: 200px;
+}
+
+.time{
+    margin-top: 100px;
     margin-left: 200px;
 }
 
 .description{
-    line-height: 5%;
     font-size: 20px;
 }
 
 .location{
-    line-height: 20%;
     font-size: 40px;
 }
 
@@ -42,4 +48,46 @@
     margin-left: 70px;
     display: inline-block;
     font-size: 18px;
+}
+
+.options{
+    margin-left: 200px;
+}
+
+.days{
+    display: inline-block;
+    margin-left: 100px;
+}
+
+.high{
+    display: inline-block;
+    margin-left: 50px;
+}
+
+.options{
+    margin-top: 150px;
+}
+
+.daily{
+    padding-left: 165px;
+}
+.daily-day{
+    margin-top: 30px;
+}
+
+.daily-high{
+    margin-top: 10px;
+}
+
+.daily-low{
+    margin-top: 10px;
+}
+
+.hourly{
+    padding-left: 130px;
+    display: none;
+}
+
+.hourly-time{
+    margin-top: 30px;
 }

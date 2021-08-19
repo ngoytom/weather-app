@@ -5,15 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
 
 </head>
-<body>
+<body onload="start()" >
     <div>
         <form class="search">
             <button type="button" class="submit-location" onclick="">Click Me!</button>
             <input type="text" class="search-city" placeholder="Search City"><br>
         </form>
+    </div>
+
+    <div class="time">
+        <h3>12:59 PM</h3>
+    </div>
+
+    <div class="date">
+        <h3>Monday, 24 May</h3>
     </div>
 
     <div class="weather-heading">
@@ -35,6 +45,73 @@
         <h4 class="chance-of-rain">Chance of Rain: 4%</h4>
         <h4 class="wind-speed">Wind: 25 m/s</h4>
     </div>
+
+    <div class="options">
+        <button type="button" class="daily-button" onclick="displayDaily()">Daily</button>
+        <button type="button" class= "hourly-button" onclick="displayHourly()">Hourly</button>
+    </div>
+
+    <div class="container-fluid daily">
+        <div class="row daily-day">
+            <div class="col">Monday</div>
+            <div class="col">Monday</div>
+            <div class="col">Monday</div>
+            <div class="col">Monday</div>
+            <div class="col">Monday</div>
+            <div class="col">Monday</div>
+            <div class="col">Monday</div>
+        </div>
+        <div class="row daily-high">
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+        </div>
+        <div class="row daily-low">
+            <div class="col">20</div>
+            <div class="col">20</div>
+            <div class="col">20</div>
+            <div class="col">20</div>
+            <div class="col">20</div>
+            <div class="col">20</div>
+            <div class="col">20</div>
+        </div>
+    </div>
+    
+    <div class="container-fluid hourly">
+        <div class="row hourly-time">
+            <div class="col">11PM</div>
+            <div class="col">11PM</div>
+            <div class="col">11PM</div>
+            <div class="col">11PM</div>
+            <div class="col">11PM</div>
+            <div class="col">11PM</div>
+            <div class="col">11PM</div>
+            <div class="col">11PM</div>
+        </div>
+        <div class="row hourly-temp">
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>
+            <div class="col">30</div>    
+        </div>
+
+    </div>
+        
+
+    <!--Based on option selected change CSS options to show which appears-->
+    <div class="hourly">
+
+    </div>
+
+
 
     <script src="main.js"></script>
 </body>
