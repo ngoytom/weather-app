@@ -3,6 +3,8 @@ const submit = document.querySelector(".submit-location")
 const clock = document.querySelector(".time")
 const date = document.querySelector(".date")
 
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
 daily = document.querySelector(".daily")
 hourly = document.querySelector(".hourly")
 
@@ -72,13 +74,13 @@ async function getWeatherData(location){
     const newData = processWeatherData(weatherData);
     updateCityTime(weatherData);
     displayData(newData);
+    const advNewData = getAdvancedWeatherData(weatherData);
 
 }
 
 //Change Local Time to City Time of city searched ADVANCED WEATHER FUNCTION
 updateCityTime = (weatherData) => {
     //https://stackoverflow.com/questions/10087819/convert-date-to-another-timezone-in-javascript
-    console.log(new Date(weatherData.dt*1000+(weatherData.timezone*1000))); // plus
 }   
 
 //Gets Current Weather, Feels Like, Humidity, Wind Speed, Country, City Name, Condition. Lon and Lat for second API call
@@ -97,20 +99,86 @@ function processWeatherData(weatherData){
         country: weatherData.sys.country,
         cityName: weatherData.name,
         condition: weatherData.weather[0].description.toUpperCase(),
-        coords: {
-            lat: weatherData.coord.lat,
-            lon: weatherData.coord.long,
-        },
     }
-
-    console.log(data.currentTemp.c);
-    console.log(data.condition);
-    console.log(data.windSpeed);
     return data;
 }
 
-async function getAdvancedWeatherData(location){    
+async function getAdvancedWeatherData(processedWeatherData){  
+    console.log(processedWeatherData)
+
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${processedWeatherData.coord.lat}&lon=${processedWeatherData.coord.lon}&
+    exclude=minutely,alerts&units=metric&appid=APIKEY`)
+    const advWeatherData = await response.json();
+    renderDailyForecast(advWeatherData);
+    console.log(advWeatherData)
+
+}
+
+//Gets the names of the next day to display to DOM
+function getNextDays(day){
+    let currentDay = 0;
+    let sequence = [];
+
+    if (day == "Sunday")
+        currentDay = 0;
+    else if (day == "Monday")
+        currentDay = 1;
+    else if (day == "Tuesday")
+        currentDay = 2;
+    else if (day == "Wednesday")
+        currentDay = 3;
+    else if (day == "Thursday")
+        currentDay = 4;
+    else if (day == "Friday")
+        currentDay = 5;
+    else if (day == "Saturday")
+        currentDay = 6;
     
+    for(let i = 0; i < days.length; i++){
+        //Goes back to the beginning of the list
+        if (currentDay > 6){
+            currentDay = 0;
+        }
+        sequence.push(days[currentDay]);
+        currentDay++;
+    }
+    return sequence;
+}
+
+//Function Renders Daily Weather
+function renderDailyForecast(advWeatherData){
+
+    //Render Day
+    const date = new Date();
+    const current = date.toLocaleString("en-us", {timeZone: advWeatherData.timezone, weekday: "long"});
+    const sequence = getNextDays(current);
+
+    document.querySelector("#day1").textContent = `${sequence[0]}`;
+    document.querySelector("#day2").textContent = `${sequence[1]}`;
+    document.querySelector("#day3").textContent = `${sequence[2]}`;
+    document.querySelector("#day4").textContent = `${sequence[3]}`;
+    document.querySelector("#day5").textContent = `${sequence[4]}`;
+    document.querySelector("#day6").textContent = `${sequence[5]}`;
+    document.querySelector("#day7").textContent = `${sequence[6]}`;
+
+    //Render Daily Highs
+    document.querySelector("#day-1-high").textContent = `${Math.round(advWeatherData.daily[1].temp.max)}`;
+    document.querySelector("#day-2-high").textContent = `${Math.round(advWeatherData.daily[2].temp.max)}`;
+    document.querySelector("#day-3-high").textContent = `${Math.round(advWeatherData.daily[3].temp.max)}`;
+    document.querySelector("#day-4-high").textContent = `${Math.round(advWeatherData.daily[4].temp.max)}`;
+    document.querySelector("#day-5-high").textContent = `${Math.round(advWeatherData.daily[5].temp.max)}`;
+    document.querySelector("#day-6-high").textContent = `${Math.round(advWeatherData.daily[6].temp.max)}`;
+    document.querySelector("#day-7-high").textContent = `${Math.round(advWeatherData.daily[7].temp.max)}`;
+
+    //Render Daily Lows
+    document.querySelector("#day-1-low").textContent = `${Math.round(advWeatherData.daily[1].temp.min)}`;
+    document.querySelector("#day-2-low").textContent = `${Math.round(advWeatherData.daily[2].temp.min)}`;
+    document.querySelector("#day-3-low").textContent = `${Math.round(advWeatherData.daily[3].temp.min)}`;
+    document.querySelector("#day-4-low").textContent = `${Math.round(advWeatherData.daily[4].temp.min)}`;
+    document.querySelector("#day-5-low").textContent = `${Math.round(advWeatherData.daily[5].temp.min)}`;
+    document.querySelector("#day-6-low").textContent = `${Math.round(advWeatherData.daily[6].temp.min)}`;
+    document.querySelector("#day-7-low").textContent = `${Math.round(advWeatherData.daily[7].temp.min)}`;
+
 }
 
 
