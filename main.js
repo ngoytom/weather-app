@@ -4,56 +4,72 @@ const clock = document.querySelector(".time")
 const date = document.querySelector(".date")
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+let store = null;
 
 daily = document.querySelector(".daily")
 hourly = document.querySelector(".hourly")
+hourlyOptions = document.querySelector(".hourly-nav")
 
 form.addEventListener("submit",getLocation)
 submit.addEventListener("click",getLocation)
 
-//When pages launch, load local time + date
-updateLocalTime = () => {
+start = () => {
+    getWeatherData("Toronto");
+}
 
-    const now = new Date();
-    let hour = now.getHours();
-    const min = String(now.getMinutes()).padStart(2,"0");
-    const sec = String(now.getSeconds()).padStart(2,"0");
+//Change Local Time to City Time of city searched ADVANCED WEATHER FUNCTION
+updateCityTime = (advWeatherData) => {
+    const date = new Date();
+    const convertedDate = convertTimeZone(date, advWeatherData.timezone);
+    let hours = convertedDate.getHours();
+    const minutes = "0" + convertedDate.getMinutes();
+    const seconds = "0" + convertedDate.getSeconds();
     let desc = "AM"
 
-    if (hour > 12){
+    if (hours > 12){
         desc = "PM";
-        hour -= 12;
+        hours -= 12;
     }
     else{
         desc = "AM";
     }
-    clock.textContent = `${hour}:${min}:${sec} ${desc}`
+    clock.textContent = `${hours}:${minutes.substr(-2)}:${seconds.substr(-2)} ${desc}`
+}   
+
+//Converts UTC Time to local time
+convertTimeZone = (date ,timezone) => {
+    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: timezone}));
 }
 
-setInterval(updateLocalTime, 1000) //Every 1 second
+window.setInterval(function(){
+    updateCityTime(store);
+}, 1000) //Every 1 second
 
-updateDate = () => {
-    const now = new Date();
-    const day = now.getDate();
-    const month = now.getMonth();
-    const year = now.getFullYear();
+updateDate = (advWeatherData) => {
+    const dateT = new Date();
+    const convertedDate = convertTimeZone(dateT, advWeatherData.timezone);
+    console.log(convertedDate)
+    const day = convertedDate.getDate();
+    console.log(day)
+    const month = convertedDate.getMonth();
+    console.log(month)
+    const year = convertedDate.getFullYear();
+    console.log(year)
     
-    date.textContent = `${day}/${month}/${year}`
-}
-
-start = () => {
-    updateLocalTime();
-    updateDate();
+    date.textContent = `${month}/${day}/${year}`
 }
 
 displayHourly = () => {
    daily.style.display = "none";
-   hourly.style.display = "block"
+   hourly.style.display = "block";
+   hourlyOptions.style.display = "inline-block";
 }
 
 displayDaily = () => {
     daily.style.display = "block";
-    hourly.style.display = "none"
+    hourly.style.display = "none";
+    hourlyOptions.style.display = "none";
+    
  }
 
 function getLocation(e){
@@ -72,16 +88,10 @@ async function getWeatherData(location){
     const weatherData = await response.json();
     console.log(weatherData);
     const newData = processWeatherData(weatherData);
-    updateCityTime(weatherData);
     displayData(newData);
     const advNewData = getAdvancedWeatherData(weatherData);
 
 }
-
-//Change Local Time to City Time of city searched ADVANCED WEATHER FUNCTION
-updateCityTime = (weatherData) => {
-    //https://stackoverflow.com/questions/10087819/convert-date-to-another-timezone-in-javascript
-}   
 
 //Gets Current Weather, Feels Like, Humidity, Wind Speed, Country, City Name, Condition. Lon and Lat for second API call
 function processWeatherData(weatherData){
@@ -104,12 +114,14 @@ function processWeatherData(weatherData){
 }
 
 async function getAdvancedWeatherData(processedWeatherData){  
-    console.log(processedWeatherData)
-
     const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${processedWeatherData.coord.lat}&lon=${processedWeatherData.coord.lon}&
     exclude=minutely,alerts&units=metric&appid=APIKEY`)
     const advWeatherData = await response.json();
+    store = advWeatherData;
+    updateCityTime(advWeatherData);
+    updateDate(advWeatherData);
     renderDailyForecast(advWeatherData);
+    renderHourlyForecast(advWeatherData);
     console.log(advWeatherData)
 
 }
@@ -179,6 +191,20 @@ function renderDailyForecast(advWeatherData){
     document.querySelector("#day-6-low").textContent = `${Math.round(advWeatherData.daily[6].temp.min)}`;
     document.querySelector("#day-7-low").textContent = `${Math.round(advWeatherData.daily[7].temp.min)}`;
 
+}
+
+function convertTime(unixTime){
+    const date = new Date(unixTime * 1000);
+    const hours = date.getHours();
+
+    return hours
+}
+
+//Function Renders Hourly Weather
+function renderHourlyForecast(advWeatherData){
+    const date = new Date(advWeatherData.hourly[5].dt);
+    console.log(convertTime(date));
+    console.log(advWeatherData.hourly[1].dt);
 }
 
 

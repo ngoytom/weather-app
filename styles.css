@@ -54,6 +54,11 @@
     margin-left: 200px;
 }
 
+.hourly-nav{
+    margin-left: 30px;
+    display: none;
+}
+
 .days{
     display: inline-block;
     margin-left: 100px;

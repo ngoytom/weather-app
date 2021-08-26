@@ -41,7 +41,7 @@
 
     <div class="weather-information">
         <h4 class="feels-like">Feels Like: 35 <sup>°C</sup></h4>
-        <h4 class="humidity">Humidity: 69%</h4>
+        <h4 class="humidity">Humidity:  69%</h4>
         <h4 class="chance-of-rain">Chance of Rain: 4%</h4>
         <h4 class="wind-speed">Wind: 25 m/s</h4>
     </div>
@@ -49,6 +49,26 @@
     <div class="options">
         <button type="button" class="daily-button" onclick="displayDaily()">Daily</button>
         <button type="button" class= "hourly-button" onclick="displayHourly()">Hourly</button>
+        
+        <span class="hourly-nav">
+            <ul class="pagination nav-options options-nav">
+                <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only"></span>
+                </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only"></span>
+                </a>
+                </li>
+            </ul>
+        </span>
     </div>
 
     <div class="container-fluid daily">
@@ -83,24 +103,24 @@
     
     <div class="container-fluid hourly">
         <div class="row hourly-time">
-            <div class="col">11PM</div>
-            <div class="col">11PM</div>
-            <div class="col">11PM</div>
-            <div class="col">11PM</div>
-            <div class="col">11PM</div>
-            <div class="col">11PM</div>
-            <div class="col">11PM</div>
-            <div class="col">11PM</div>
+            <div class="col" id="time-1">11PM</div>
+            <div class="col" id="time-2">11PM</div>
+            <div class="col" id="time-3">11PM</div>
+            <div class="col" id="time-4">11PM</div>
+            <div class="col" id="time-5">11PM</div>
+            <div class="col" id="time-6">11PM</div>
+            <div class="col" id="time-7">11PM</div>
+            <div class="col" id="time-8">11PM</div>
         </div>
         <div class="row hourly-temp">
-            <div class="col">30</div>
-            <div class="col">30</div>
-            <div class="col">30</div>
-            <div class="col">30</div>
-            <div class="col">30</div>
-            <div class="col">30</div>
-            <div class="col">30</div>
-            <div class="col">30</div>    
+            <div class="col" id="temp-1">30</div>
+            <div class="col" id="temp-2">30</div>
+            <div class="col" id="temp-3">30</div>
+            <div class="col" id="temp-4">30</div>
+            <div class="col" id="temp-5">30</div>
+            <div class="col" id="temp-6">30</div>
+            <div class="col" id="temp-7">30</div>
+            <div class="col" id="temp-8">30</div>    
         </div>
 
     </div>
