@@ -98,7 +98,7 @@ function getLocation(e){
 
 //This function gets basic information weather information including log and lat which will be used in our second API call
 async function getWeatherData(location){
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=12feff9625fd1ae2a4843db75b24cb89`)
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=APIKEY`)
     //Make sure API key is safe before uploading
     const weatherData = await response.json();
     console.log(weatherData);
@@ -130,7 +130,7 @@ function processWeatherData(weatherData){
 
 async function getAdvancedWeatherData(processedWeatherData){  
     const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${processedWeatherData.coord.lat}&lon=${processedWeatherData.coord.lon}&
-    exclude=minutely,alerts&units=metric&appid=12feff9625fd1ae2a4843db75b24cb89`)
+    exclude=minutely,alerts&units=metric&appid=APIKEY`)
     const advWeatherData = await response.json();
     store = advWeatherData;
 
