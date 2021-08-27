@@ -13,7 +13,7 @@ let celcius = true;
 const daily = document.querySelector(".daily")
 const hourly = document.querySelector(".hourly")
 const hourlyOptions = document.querySelector(".hourly-nav")
-const hourlyNav = document.querySelectorAll(".page-link")
+const hourlyNav = document.querySelectorAll(".hbutton-nav")
 
 const timeOne = document.querySelector(".time-1")
 const timeTwo = document.querySelector(".time-2")
@@ -107,23 +107,27 @@ function getLocation(e){
     e.preventDefault(); //Prevents page from refreshing when submitting text field
     const input = document.querySelector("input[type='text']")
     const location = input.value;
-    console.log(location);
     getWeatherData(location);
     //Pass location into API fetch function
 }
 
 //This function gets basic information weather information including log and lat which will be used in our second API call
 async function getWeatherData(location){
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=APIKEY`)
-    //Make sure API key is safe before uploading
-    const weatherData = await response.json();
-    console.log(weatherData);
-    const newData = processWeatherData(weatherData);
-    storeBasic = newData;
-    displayData(newData);
-    const advNewData = getAdvancedWeatherData(weatherData);
-
+    try{
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=APIKEY`)
+        //Make sure API key is safe before uploading
+        const weatherData = await response.json();
+        const newData = processWeatherData(weatherData);
+        storeBasic = newData;
+        displayData(newData);
+        const advNewData = getAdvancedWeatherData(weatherData);
+        document.querySelector('.error-message').style.visibility = "hidden";
+    } catch (err) {
+        document.querySelector('.error-message').style.visibility = "visible";
+    }
 }
+
+
 
 //Gets Current Weather, Feels Like, Humidity, Wind Speed, Country, City Name, Condition. Lon and Lat for second API call
 function processWeatherData(weatherData){
@@ -186,6 +190,7 @@ function getNextDays(day){
     else if (day == "Saturday")
         currentDay = 6;
     
+    currentDay++; //Gets next day
     for(let i = 0; i < days.length; i++){
         //Goes back to the beginning of the list
         if (currentDay > 6){
@@ -253,13 +258,31 @@ function renderDailyForecast(advWeatherData){
     }
 }
 
-
-
 function convertTime(unixTime){
     const date = new Date(unixTime * 1000);
     const hours = date.getHours();
     return hours
 }
+
+
+const options = document.getElementById("options");
+const btnsOptions = options.getElementsByClassName("option-nav");
+//Daily and Hourly Button Actives
+for (let i = 0; i < btnsOptions.length; i++) {
+    btnsOptions[i].addEventListener("click", function() {
+    let current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+    });
+}
+//Hourly Page Number Actives
+for (let i = 0; i < hourlyNav.length; i++) {
+    hourlyNav[i].addEventListener("click", function() {
+    let current = document.getElementsByClassName("actives");
+    current[0].className = current[0].className.replace(" actives", "");
+    this.className += " actives";
+    });
+  }
 
 function updateHourlyPage(id) {
     if (id == 1){
@@ -270,12 +293,6 @@ function updateHourlyPage(id) {
     }
     else if (id == 3){
         pageCount = 3;
-    }
-    else if (id == 0 && pageCount > 1){
-        pageCount--;
-    }
-    else if (id == 4 && pageCount < 3){ //Next Button
-        pageCount++;
     }
 }
 
@@ -336,7 +353,7 @@ function renderHourlyTime(advWeatherData, id = 1){
         document.querySelector("#temp-5").innerHTML = `${temp[4]} <sup>°C</sup>`
         document.querySelector("#temp-6").innerHTML = `${temp[5]} <sup>°C</sup>`
         document.querySelector("#temp-7").innerHTML = `${temp[6]} <sup>°C</sup>`
-        document.querySelector("#temp-8").innerHTML = `${temp[7]} <su>p°C</sup>`
+        document.querySelector("#temp-8").innerHTML = `${temp[7]} <sup>°C</sup>`
     }
     else{
         document.querySelector("#temp-1").innerHTML = `${Math.round(temp[0] * 1.8 + 32)} <sup>°F</sup>`
@@ -362,7 +379,6 @@ function getHourlyTemperature(advWeatherData, min, max){
 
     return temp;
 }
-
 
 //Display information to the DOM
 function displayData(weatherData){

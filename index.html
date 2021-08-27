@@ -13,9 +13,13 @@
 <body onload="start()" >
     <div>
         <form class="search">
-            <button type="button" class="submit-location" onclick="">Click Me!</button>
-            <input type="text" class="search-city" placeholder="Search City"><br>
+            <button type="button" class="submit-location btn btn-sm btn-outline-secondary btn-light" onclick="">Search</button>
+            <input type="text" class="search-city form-control" placeholder="Search City"><br>
         </form>
+    </div>
+
+    <div class="error-message">
+        <p>Location not found! Please enter a City!</p>
     </div>
 
     <div class="time">
@@ -51,93 +55,69 @@
         <label class="form-check-label" for="flexSwitchCheckDefault">Display in Fahrenheit</label>
     </div>
 
-    <div class="options">
-        <button type="button" class="daily-button" onclick="displayDaily()">Daily</button>
-        <button type="button" class= "hourly-button" onclick="displayHourly()">Hourly</button>
+    <div class="options" id="options">
+        <button type="button" class="btn btn-outline-secondary btn-light option-nav active" onclick="displayDaily()">Daily</button>
+        <button type="button" class="btn btn-outline-secondary btn-light option-nav" onclick="displayHourly()">Hourly</button>
         
         <span class="hourly-nav">
-            <ul class="pagination nav-options options-nav">
-                <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous" id="0">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only"></span>
-                </a>
-                </li>
-                <li class="page-item"><a class="page-link" id="1" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" id="2" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" id="3" href="#">3</a></li>
-                <li class="page-item">
-                <a class="page-link update-hourly" href="#" aria-label="Next" id="4">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only"></span>
-                </a>
-                </li>
-            </ul>
+            <button type="button" class="btn btn-outline-secondary btn-light hbutton-nav actives" onclick="this.blur()" id="1">1</button>
+            <button type="button" class="btn btn-outline-secondary btn-light hbutton-nav" onclick="this.blur()" id="2">2</button>
+            <button type="button" class="btn btn-outline-secondary btn-light hbutton-nav" onclick="this.blur()" id="3">3</button>
         </span>
     </div>
 
     <div class="container-fluid daily">
         <div class="row daily-day">
-            <div class="col" id="day1" >Monday</div>
-            <div class="col" id="day2">Monday</div>
-            <div class="col" id="day3">Monday</div>
-            <div class="col" id="day4">Monday</div>
-            <div class="col" id="day5">Monday</div>
-            <div class="col" id="day6">Monday</div>
-            <div class="col" id="day7">Monday</div>
+            <div class="col daily-day-label" id="day1">Monday</div>
+            <div class="col daily-day-label" id="day2">Monday</div>
+            <div class="col daily-day-label" id="day3">Monday</div>
+            <div class="col daily-day-label" id="day4">Monday</div>
+            <div class="col daily-day-label" id="day5">Monday</div>
+            <div class="col daily-day-label" id="day6">Monday</div>
+            <div class="col daily-day-label" id="day7">Monday</div>
         </div>
         <div class="row daily-high">
-            <div class="col" id="day-1-high">30</div>
-            <div class="col" id="day-2-high">30</div>
-            <div class="col" id="day-3-high">30</div>
-            <div class="col" id="day-4-high">30</div>
-            <div class="col" id="day-5-high">30</div>
-            <div class="col" id="day-6-high">30</div>
-            <div class="col" id="day-7-high">30</div>
+            <div class="col daily-high-label" id="day-1-high">30</div>
+            <div class="col daily-high-label" id="day-2-high">30</div>
+            <div class="col daily-high-label" id="day-3-high">30</div>
+            <div class="col daily-high-label" id="day-4-high">30</div>
+            <div class="col daily-high-label" id="day-5-high">30</div>
+            <div class="col daily-high-label" id="day-6-high">30</div>
+            <div class="col daily-high-label" id="day-7-high">30</div>
         </div>
         <div class="row daily-low">
-            <div class="col" id="day-1-low">20</div>
-            <div class="col" id="day-2-low">20</div>
-            <div class="col" id="day-3-low">20</div>
-            <div class="col" id="day-4-low">20</div>
-            <div class="col" id="day-5-low">20</div>
-            <div class="col" id="day-6-low">20</div>
-            <div class="col" id="day-7-low">20</div>
+            <div class="col daily-low-label" id="day-1-low">20</div>
+            <div class="col daily-low-label" id="day-2-low">20</div>
+            <div class="col daily-low-label" id="day-3-low">20</div>
+            <div class="col daily-low-label" id="day-4-low">20</div>
+            <div class="col daily-low-label" id="day-5-low">20</div>
+            <div class="col daily-low-label" id="day-6-low">20</div>
+            <div class="col daily-low-label" id="day-7-low">20</div>
         </div>
     </div>
     
     <div class="container-fluid hourly">
         <div class="row hourly-time">
-            <div class="col" id="time-1">11PM</div>
-            <div class="col" id="time-2">11PM</div>
-            <div class="col" id="time-3">11PM</div>
-            <div class="col" id="time-4">11PM</div>
-            <div class="col" id="time-5">11PM</div>
-            <div class="col" id="time-6">11PM</div>
-            <div class="col" id="time-7">11PM</div>
-            <div class="col" id="time-8">11PM</div>
+            <div class="col hourly-time-label" id="time-1">11PM</div>
+            <div class="col hourly-time-label" id="time-2">11PM</div>
+            <div class="col hourly-time-label" id="time-3">11PM</div>
+            <div class="col hourly-time-label" id="time-4">11PM</div>
+            <div class="col hourly-time-label" id="time-5">11PM</div>
+            <div class="col hourly-time-label" id="time-6">11PM</div>
+            <div class="col hourly-time-label" id="time-7">11PM</div>
+            <div class="col hourly-time-label" id="time-8">11PM</div>
         </div>
         <div class="row hourly-temp">
-            <div class="col" id="temp-1">30</div>
-            <div class="col" id="temp-2">30</div>
-            <div class="col" id="temp-3">30</div>
-            <div class="col" id="temp-4">30</div>
-            <div class="col" id="temp-5">30</div>
-            <div class="col" id="temp-6">30</div>
-            <div class="col" id="temp-7">30</div>
-            <div class="col" id="temp-8">30</div>    
+            <div class="col hourly-temp-label" id="temp-1">30</div>
+            <div class="col hourly-temp-label" id="temp-2">30</div>
+            <div class="col hourly-temp-label" id="temp-3">30</div>
+            <div class="col hourly-temp-label" id="temp-4">30</div>
+            <div class="col hourly-temp-label" id="temp-5">30</div>
+            <div class="col hourly-temp-label" id="temp-6">30</div>
+            <div class="col hourly-temp-label" id="temp-7">30</div>
+            <div class="col hourly-temp-label" id="temp-8">30</div>    
         </div>
-
     </div>
-        
-
-    <!--Based on option selected change CSS options to show which appears-->
-    <div class="hourly">
-
-    </div>
-
-
-
     <script src="main.js"></script>
 </body>
 </html>

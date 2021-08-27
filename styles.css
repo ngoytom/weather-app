@@ -1,16 +1,39 @@
+body{
+    background-color: #181a1b;
+    color: #d1cdc7;
+}
 .search{
-    margin-top: 30px;
-    margin-right: 20px;
+    padding-top: 30px;
+    margin-right: 70px;
     text-align: right;
+    margin-bottom: -50px;
 }
 
 .temperature-option{
     margin-left: 200px;
     margin-top: 10px;
+    margin-bottom: -40px;
 }
 
 .weather-heading{
     margin-left: 200px;
+}
+
+.error-message{
+    padding-top: 50px;
+    margin-right: 95px;
+    text-align: right;
+    margin-bottom: -70px;
+    color: #dc3545;
+}
+
+.search-city{
+    width: 15%;
+    display: inline-block;
+    margin-left: -3px;
+    padding-bottom: 5px;
+    padding-top: 1px;
+    
 }
 
 .date{
@@ -33,6 +56,16 @@
 .weather-temperature{
     display: inline-block;
     margin-left: 200px;
+}
+
+.active{
+    background-color: #666;
+    color: white;
+}
+
+.actives{
+    background-color: #666;
+    color: white;
 }
 
 .divider{
@@ -85,6 +118,19 @@
     margin-top: 30px;
 }
 
+.daily-day-label{
+    font-size: 20px;
+}
+
+.daily-high-label{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.daily-low-label{
+    font-size: 15px;
+}
+
 .daily-high{
     margin-top: 10px;
 }
@@ -100,4 +146,13 @@
 
 .hourly-time{
     margin-top: 30px;
+}
+
+.hourly-time-label{
+    font-size: 20px
+}
+
+.hourly-temp-label{
+    font-size: 25px;
+    font-weight: bold;
 }
