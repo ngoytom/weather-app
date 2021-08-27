@@ -2,10 +2,13 @@ const form = document.querySelector("form")
 const submit = document.querySelector(".submit-location")
 const clock = document.querySelector(".time")
 const date = document.querySelector(".date")
+const temperatureCheck = document.querySelector(".temperature-check")
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+let storeBasic = null; //Variable Store weatherData
 let store = null; //Variable stores advWeatherData information for start load
 let pageCount = 1; //Variable stores current page for Hourly Nav
+let celcius = true;
 
 const daily = document.querySelector(".daily")
 const hourly = document.querySelector(".hourly")
@@ -23,6 +26,7 @@ const timeEight = document.querySelector(".time-8")
 
 form.addEventListener("submit", getLocation);
 submit.addEventListener("click", getLocation);
+temperatureCheck.addEventListener("click", validateCheck);
 
 start = () => {
     getWeatherData("Toronto");
@@ -87,6 +91,18 @@ displayDaily = () => {
     
  }
 
+ function validateCheck(){
+     if (temperatureCheck.checked){
+        celcius = false; 
+     }
+     else{
+         celcius = true;
+     }
+     displayData(storeBasic);
+     renderDailyForecast(store);
+     renderHourlyTime(store);
+ }
+
 function getLocation(e){
     e.preventDefault(); //Prevents page from refreshing when submitting text field
     const input = document.querySelector("input[type='text']")
@@ -103,6 +119,7 @@ async function getWeatherData(location){
     const weatherData = await response.json();
     console.log(weatherData);
     const newData = processWeatherData(weatherData);
+    storeBasic = newData;
     displayData(newData);
     const advNewData = getAdvancedWeatherData(weatherData);
 
@@ -113,11 +130,11 @@ function processWeatherData(weatherData){
     const data = {
         currentTemp: {
             c: Math.round(weatherData.main.temp), //Metric system
-            f: Math.round((weatherData.main.temp - 32)/1.8000),
+            f: Math.round((weatherData.main.temp * 1.8) + 32),
         },
         feelsLike: {
             c: Math.round(weatherData.main.feels_like),
-            f: Math.round((weatherData.main.feels_like - 32)/1.8000),
+            f: Math.round((weatherData.main.feels_like * 1.8) + 32),
         },
         humidity: weatherData.main.humidity,
         windSpeed: weatherData.wind.speed,
@@ -196,25 +213,47 @@ function renderDailyForecast(advWeatherData){
     document.querySelector("#day6").textContent = `${sequence[5]}`;
     document.querySelector("#day7").textContent = `${sequence[6]}`;
 
-    //Render Daily Highs
-    document.querySelector("#day-1-high").textContent = `${Math.round(advWeatherData.daily[1].temp.max)}`;
-    document.querySelector("#day-2-high").textContent = `${Math.round(advWeatherData.daily[2].temp.max)}`;
-    document.querySelector("#day-3-high").textContent = `${Math.round(advWeatherData.daily[3].temp.max)}`;
-    document.querySelector("#day-4-high").textContent = `${Math.round(advWeatherData.daily[4].temp.max)}`;
-    document.querySelector("#day-5-high").textContent = `${Math.round(advWeatherData.daily[5].temp.max)}`;
-    document.querySelector("#day-6-high").textContent = `${Math.round(advWeatherData.daily[6].temp.max)}`;
-    document.querySelector("#day-7-high").textContent = `${Math.round(advWeatherData.daily[7].temp.max)}`;
+    if (celcius == true){
+        //Render Daily Highs
+        document.querySelector("#day-1-high").innerHTML = `${Math.round(advWeatherData.daily[1].temp.max)} <sup>°C</sup>`;
+        document.querySelector("#day-2-high").innerHTML = `${Math.round(advWeatherData.daily[2].temp.max)} <sup>°C</sup>`;
+        document.querySelector("#day-3-high").innerHTML = `${Math.round(advWeatherData.daily[3].temp.max)} <sup>°C</sup>`;
+        document.querySelector("#day-4-high").innerHTML = `${Math.round(advWeatherData.daily[4].temp.max)} <sup>°C</sup>`;
+        document.querySelector("#day-5-high").innerHTML = `${Math.round(advWeatherData.daily[5].temp.max)} <sup>°C</sup>`;
+        document.querySelector("#day-6-high").innerHTML = `${Math.round(advWeatherData.daily[6].temp.max)} <sup>°C</sup>`;
+        document.querySelector("#day-7-high").innerHTML = `${Math.round(advWeatherData.daily[7].temp.max)} <sup>°C</sup>`;
 
-    //Render Daily Lows
-    document.querySelector("#day-1-low").textContent = `${Math.round(advWeatherData.daily[1].temp.min)}`;
-    document.querySelector("#day-2-low").textContent = `${Math.round(advWeatherData.daily[2].temp.min)}`;
-    document.querySelector("#day-3-low").textContent = `${Math.round(advWeatherData.daily[3].temp.min)}`;
-    document.querySelector("#day-4-low").textContent = `${Math.round(advWeatherData.daily[4].temp.min)}`;
-    document.querySelector("#day-5-low").textContent = `${Math.round(advWeatherData.daily[5].temp.min)}`;
-    document.querySelector("#day-6-low").textContent = `${Math.round(advWeatherData.daily[6].temp.min)}`;
-    document.querySelector("#day-7-low").textContent = `${Math.round(advWeatherData.daily[7].temp.min)}`;
+        //Render Daily Lows
+        document.querySelector("#day-1-low").innerHTML = `${Math.round(advWeatherData.daily[1].temp.min)} <sup>°C</sup>`;
+        document.querySelector("#day-2-low").innerHTML = `${Math.round(advWeatherData.daily[2].temp.min)} <sup>°C</sup>`;
+        document.querySelector("#day-3-low").innerHTML = `${Math.round(advWeatherData.daily[3].temp.min)} <sup>°C</sup>`;
+        document.querySelector("#day-4-low").innerHTML = `${Math.round(advWeatherData.daily[4].temp.min)} <sup>°C</sup>`;
+        document.querySelector("#day-5-low").innerHTML = `${Math.round(advWeatherData.daily[5].temp.min)} <sup>°C</sup>`;
+        document.querySelector("#day-6-low").innerHTML = `${Math.round(advWeatherData.daily[6].temp.min)} <sup>°C</sup>`;
+        document.querySelector("#day-7-low").innerHTML = `${Math.round(advWeatherData.daily[7].temp.min)} <sup>°C</sup>`;
+    }
+    else{
+        //Render Daily Highs
+        document.querySelector("#day-1-high").innerHTML = `${Math.round(advWeatherData.daily[1].temp.max * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-2-high").innerHTML = `${Math.round(advWeatherData.daily[2].temp.max * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-3-high").innerHTML = `${Math.round(advWeatherData.daily[3].temp.max * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-4-high").innerHTML = `${Math.round(advWeatherData.daily[4].temp.max * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-5-high").innerHTML = `${Math.round(advWeatherData.daily[5].temp.max * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-6-high").innerHTML = `${Math.round(advWeatherData.daily[6].temp.max * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-7-high").innerHTML = `${Math.round(advWeatherData.daily[7].temp.max * 1.8 + 32)} <sup>°F</sup>`;
 
+        //Render Daily Lows
+        document.querySelector("#day-1-low").innerHTML = `${Math.round(advWeatherData.daily[1].temp.min * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-2-low").innerHTML = `${Math.round(advWeatherData.daily[2].temp.min * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-3-low").innerHTML = `${Math.round(advWeatherData.daily[3].temp.min * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-4-low").innerHTML = `${Math.round(advWeatherData.daily[4].temp.min * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-5-low").innerHTML = `${Math.round(advWeatherData.daily[5].temp.min * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-6-low").innerHTML = `${Math.round(advWeatherData.daily[6].temp.min * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#day-7-low").innerHTML = `${Math.round(advWeatherData.daily[7].temp.min * 1.8 + 32)} <sup>°F</sup>`;
+    }
 }
+
+
 
 function convertTime(unixTime){
     const date = new Date(unixTime * 1000);
@@ -244,6 +283,7 @@ function renderHourlyTime(advWeatherData, id = 1){
     console.log(id);
     updateHourlyPage(id);
     let time = [];
+    let temp = [];
     let p = null;
     let min = 1;
     let max = 9;
@@ -286,10 +326,31 @@ function renderHourlyTime(advWeatherData, id = 1){
     document.querySelector("#time-7").textContent = `${time[6]}`
     document.querySelector("#time-8").textContent = `${time[7]}`
     
-    renderHourlyTemperature(advWeatherData, min, max);
+    temp = getHourlyTemperature(advWeatherData, min, max);
+
+    if (celcius == true){
+        document.querySelector("#temp-1").innerHTML = `${temp[0]} <sup>°C</sup>`
+        document.querySelector("#temp-2").innerHTML = `${temp[1]} <sup>°C</sup>`
+        document.querySelector("#temp-3").innerHTML = `${temp[2]} <sup>°C</sup>`
+        document.querySelector("#temp-4").innerHTML = `${temp[3]} <sup>°C</sup>`
+        document.querySelector("#temp-5").innerHTML = `${temp[4]} <sup>°C</sup>`
+        document.querySelector("#temp-6").innerHTML = `${temp[5]} <sup>°C</sup>`
+        document.querySelector("#temp-7").innerHTML = `${temp[6]} <sup>°C</sup>`
+        document.querySelector("#temp-8").innerHTML = `${temp[7]} <su>p°C</sup>`
+    }
+    else{
+        document.querySelector("#temp-1").innerHTML = `${Math.round(temp[0] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-2").innerHTML = `${Math.round(temp[1] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-3").innerHTML = `${Math.round(temp[2] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-4").innerHTML = `${Math.round(temp[3] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-5").innerHTML = `${Math.round(temp[4] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-6").innerHTML = `${Math.round(temp[5] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-7").innerHTML = `${Math.round(temp[6] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-8").innerHTML = `${Math.round(temp[7] * 1.8 + 32)} <sup>°F</sup>`
+    }
 }
 
-function renderHourlyTemperature(advWeatherData, min, max){
+function getHourlyTemperature(advWeatherData, min, max){
     let temp = [];
     console.log(min)
     console.log(max)
@@ -299,21 +360,20 @@ function renderHourlyTemperature(advWeatherData, min, max){
         temp.push(Math.round(advWeatherData.hourly[i].temp));
     }
 
-    document.querySelector("#temp-1").innerHTML = `${temp[0]} <sup>°C</sup>`
-    document.querySelector("#temp-2").innerHTML = `${temp[1]} <sup>°C</sup>`
-    document.querySelector("#temp-3").innerHTML = `${temp[2]} <sup>°C</sup>`
-    document.querySelector("#temp-4").innerHTML = `${temp[3]} <sup>°C</sup>`
-    document.querySelector("#temp-5").innerHTML = `${temp[4]} <sup>°C</sup>`
-    document.querySelector("#temp-6").innerHTML = `${temp[5]} <sup>°C</sup>`
-    document.querySelector("#temp-7").innerHTML = `${temp[6]} <sup>°C</sup>`
-    document.querySelector("#temp-8").innerHTML = `${temp[7]} <sup>°C</sup>`
+    return temp;
 }
 
 
 //Display information to the DOM
 function displayData(weatherData){
-    document.querySelector(".feels-like").innerHTML = `Feels like: ${weatherData.feelsLike.c} <sup>°C</sup>`;
-    document.querySelector(".current-temp").innerHTML = `${weatherData.currentTemp.c}<sup class="superscript">°C</sup>`;
+    if (celcius == true){
+        document.querySelector(".feels-like").innerHTML = `Feels like: ${weatherData.feelsLike.c} <sup>°C</sup>`;
+        document.querySelector(".current-temp").innerHTML = `${weatherData.currentTemp.c}<sup class="superscript">°C</sup>`;
+    }
+    else{
+        document.querySelector(".feels-like").innerHTML = `Feels like: ${weatherData.feelsLike.f} <sup>°F</sup>`;
+        document.querySelector(".current-temp").innerHTML = `${weatherData.currentTemp.f}<sup class="superscript">°F</sup>`;
+    }
     document.querySelector(".humidity").textContent = `Humidity: ${weatherData.humidity}%`;
     document.querySelector(".wind-speed").textContent = `Wind: ${weatherData.windSpeed} m/s`;
     document.querySelector(".location").textContent = `${weatherData.cityName}, ${weatherData.country}`;
