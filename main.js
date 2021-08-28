@@ -9,6 +9,8 @@ let storeBasic = null; //Variable Store weatherData
 let store = null; //Variable stores advWeatherData information for start load
 let pageCount = 1; //Variable stores current page for Hourly Nav
 let celcius = true;
+let min = 1;
+let max = 9;
 
 const daily = document.querySelector(".daily")
 const hourly = document.querySelector(".hourly")
@@ -92,7 +94,7 @@ displayDaily = () => {
      }
      displayData(storeBasic);
      renderDailyForecast(store);
-     renderHourlyForecast(store);
+     renderHourlyForecast(store,"", pageCount, min, max);
  }
 
 function getLocation(e){
@@ -149,13 +151,13 @@ async function getAdvancedWeatherData(processedWeatherData){
         store = advWeatherData;
         for (let i = 0; i < hourlyNav.length; i++){
             hourlyNav[i].addEventListener("click", function(){
-                renderHourlyForecast(store, this.id);
+                renderHourlyForecast(store, this.id, pageCount, min, max);
             },false);
         }
         updateCityTime(advWeatherData);
         updateDate(advWeatherData);
         renderDailyForecast(advWeatherData);
-        renderHourlyForecast(advWeatherData);
+        renderHourlyForecast(advWeatherData, this.id, pageCount, min, max);
     } catch(err){
     } 
 }
@@ -287,15 +289,12 @@ function updateHourlyPage(id) {
         pageCount = 3;
     }
 }
-
 //Renders Hourly Section
-function renderHourlyForecast(advWeatherData, id = 1){
+function renderHourlyForecast(advWeatherData, id = 1, pageCount, min, max){
     updateHourlyPage(id);
+    console.log(pageCount)
     let time = [];
     let temp = [];
-    let min = 1;
-    let max = 9;
-
     //Based on Page number choose which index to apply to DOM
     if (pageCount == 1){
         min = 1;
@@ -310,7 +309,8 @@ function renderHourlyForecast(advWeatherData, id = 1){
         min = 17;
         max = 25;
     }
-
+    console.log(min)
+    console.log(max)
     const date = new Date();
     renderHourlyIcon(advWeatherData, min, max);
     convert = convertTimeZone(date, advWeatherData.timezone)
