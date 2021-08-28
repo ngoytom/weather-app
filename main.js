@@ -15,19 +15,11 @@ const hourly = document.querySelector(".hourly")
 const hourlyOptions = document.querySelector(".hourly-nav")
 const hourlyNav = document.querySelectorAll(".hbutton-nav")
 
-const timeOne = document.querySelector(".time-1")
-const timeTwo = document.querySelector(".time-2")
-const timeThree = document.querySelector(".time-3")
-const timeFour = document.querySelector(".time-4")
-const timeFive = document.querySelector(".time-5")
-const timeSix = document.querySelector(".time-6")
-const timeSeven = document.querySelector(".time-7")
-const timeEight = document.querySelector(".time-8")
-
 form.addEventListener("submit", getLocation);
 submit.addEventListener("click", getLocation);
 temperatureCheck.addEventListener("click", validateCheck);
 
+//Location default is set to Toronto
 start = () => {
     getWeatherData("Toronto");
 }
@@ -60,10 +52,12 @@ convertTimeZone = (date ,timezone) => {
     return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: timezone}));
 }
 
+//Update time every second
 window.setInterval(function(){
     updateCityTime(store);
-}, 1000) //Every 1 second
+}, 1000)
 
+//Update to date of city searched
 updateDate = (advWeatherData) => {
     const dateT = new Date();
     const convertedDate = convertTimeZone(dateT, advWeatherData.timezone);
@@ -74,6 +68,7 @@ updateDate = (advWeatherData) => {
     date.textContent = `${month}/${day}/${year}`
 }
 
+//Modifies DOM to display Hourly
 displayHourly = () => {
    daily.style.display = "none";
    hourly.style.display = "block";
@@ -87,6 +82,7 @@ displayDaily = () => {
     
  }
 
+ //Updates DOM based on unit selected
  function validateCheck(){
      if (temperatureCheck.checked){
         celcius = false; 
@@ -96,7 +92,7 @@ displayDaily = () => {
      }
      displayData(storeBasic);
      renderDailyForecast(store);
-     renderHourlyTime(store);
+     renderHourlyForecast(store);
  }
 
 function getLocation(e){
@@ -123,8 +119,6 @@ async function getWeatherData(location){
     }
 }
 
-
-
 //Gets Current Weather, Feels Like, Humidity, Wind Speed, Country, City Name, Condition. Lon and Lat for second API call
 function processWeatherData(weatherData){
     const data = {
@@ -146,21 +140,24 @@ function processWeatherData(weatherData){
     return data;
 }
 
-async function getAdvancedWeatherData(processedWeatherData){  
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${processedWeatherData.coord.lat}&lon=${processedWeatherData.coord.lon}&
-    exclude=minutely,alerts&units=metric&appid=APIKEY`)
-    const advWeatherData = await response.json();
-    store = advWeatherData;
-
-    for (let i = 0; i < hourlyNav.length; i++){
-        hourlyNav[i].addEventListener("click", function(){
-            renderHourlyTime(store, this.id);
-        },false);
-    }
-    updateCityTime(advWeatherData);
-    updateDate(advWeatherData);
-    renderDailyForecast(advWeatherData);
-    renderHourlyTime(advWeatherData);
+//Gets Hourly, Daily, and Weather Icons
+async function getAdvancedWeatherData(processedWeatherData){
+    try{  
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${processedWeatherData.coord.lat}&lon=${processedWeatherData.coord.lon}&
+        exclude=minutely,alerts&units=metric&appid=APIKEY`)
+        const advWeatherData = await response.json();
+        store = advWeatherData;
+        for (let i = 0; i < hourlyNav.length; i++){
+            hourlyNav[i].addEventListener("click", function(){
+                renderHourlyForecast(store, this.id);
+            },false);
+        }
+        updateCityTime(advWeatherData);
+        updateDate(advWeatherData);
+        renderDailyForecast(advWeatherData);
+        renderHourlyForecast(advWeatherData);
+    } catch(err){
+    } 
 }
 
 //Gets the names of the next day to display to DOM
@@ -249,6 +246,7 @@ function renderDailyForecast(advWeatherData){
         document.querySelector("#day-6-low").innerHTML = `${Math.round(advWeatherData.daily[6].temp.min * 1.8 + 32)} <sup>°F</sup>`;
         document.querySelector("#day-7-low").innerHTML = `${Math.round(advWeatherData.daily[7].temp.min * 1.8 + 32)} <sup>°F</sup>`;
     }
+    //Render Icons
     document.getElementById("daily-icon-1").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[1].weather[0].icon}.png`;
     document.getElementById("daily-icon-2").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[2].weather[0].icon}.png`;
     document.getElementById("daily-icon-3").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[3].weather[0].icon}.png`;
@@ -257,13 +255,6 @@ function renderDailyForecast(advWeatherData){
     document.getElementById("daily-icon-6").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[6].weather[0].icon}.png`;
     document.getElementById("daily-icon-7").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[7].weather[0].icon}.png`;
 }
-
-function convertTime(unixTime){
-    const date = new Date(unixTime * 1000);
-    const hours = date.getHours();
-    return hours
-}
-
 
 const options = document.getElementById("options");
 const btnsOptions = options.getElementsByClassName("option-nav");
@@ -284,6 +275,7 @@ for (let i = 0; i < hourlyNav.length; i++) {
     });
   }
 
+//Gets ID of page selected
 function updateHourlyPage(id) {
     if (id == 1){
         pageCount = 1;
@@ -296,15 +288,15 @@ function updateHourlyPage(id) {
     }
 }
 
-function renderHourlyTime(advWeatherData, id = 1){
+//Renders Hourly Section
+function renderHourlyForecast(advWeatherData, id = 1){
     updateHourlyPage(id);
     let time = [];
     let temp = [];
-    let p = null;
     let min = 1;
     let max = 9;
 
-    
+    //Based on Page number choose which index to apply to DOM
     if (pageCount == 1){
         min = 1;
         max = 9;
@@ -319,31 +311,43 @@ function renderHourlyTime(advWeatherData, id = 1){
         max = 25;
     }
 
+    const date = new Date();
     renderHourlyIcon(advWeatherData, min, max);
-    
-    for (let i = min; i < max; i++){
-        p = convertTime(advWeatherData.hourly[i].dt);
-        if (p > 12){
-            p -= 12;
-            time.push(p + " pm");
+    convert = convertTimeZone(date, advWeatherData.timezone)
+    let hours = convert.getHours();
+
+    //Create an array of time for the next 24 hours
+    for(let i = 0; i < 25; i++){
+        //Prevents hour from going above 24
+        if (hours > 24){
+            hours -= 24;
         }
-        else if (p == 0){
-            p = 12;
-            time.push(p + " am");
+        let hoursTemp = hours;
+        if (hoursTemp > 12){
+            hoursTemp -= 12;
+            time.push(hoursTemp + " pm");
+        }
+        else if (hoursTemp == 0){
+            hoursTemp = 12;
+            time.push(hoursTemp + " am");
+        }
+        else if (hoursTemp == 12){
+            hoursTemp = 12;
+            time.push(hoursTemp + " pm");
         }
         else{
-            time.push(p + " am");
+            time.push(hoursTemp + " am");
         }
+        hours++;
     }
 
-    document.querySelector("#time-1").textContent = `${time[0]}`
-    document.querySelector("#time-2").textContent = `${time[1]}`
-    document.querySelector("#time-3").textContent = `${time[2]}`
-    document.querySelector("#time-4").textContent = `${time[3]}`
-    document.querySelector("#time-5").textContent = `${time[4]}`
-    document.querySelector("#time-6").textContent = `${time[5]}`
-    document.querySelector("#time-7").textContent = `${time[6]}`
-    document.querySelector("#time-8").textContent = `${time[7]}`
+    //Based on the time array, manipulate the DOM
+    let timeList = document.querySelectorAll(".hourly-time-title");
+    let count = 0;
+    for(let i = min; i <= max-1; i++){
+        timeList[count].textContent = `${time[i]}`;
+        count++;
+    }
     
     temp = getHourlyTemperature(advWeatherData, min, max);
 
