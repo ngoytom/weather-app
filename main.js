@@ -67,13 +67,9 @@ window.setInterval(function(){
 updateDate = (advWeatherData) => {
     const dateT = new Date();
     const convertedDate = convertTimeZone(dateT, advWeatherData.timezone);
-    console.log(convertedDate)
     const day = convertedDate.getDate();
-    console.log(day)
     const month = convertedDate.getMonth();
-    console.log(month)
     const year = convertedDate.getFullYear();
-    console.log(year)
     
     date.textContent = `${month}/${day}/${year}`
 }
@@ -145,6 +141,7 @@ function processWeatherData(weatherData){
         country: weatherData.sys.country,
         cityName: weatherData.name,
         condition: weatherData.weather[0].description.toUpperCase(),
+        icon: weatherData.weather[0].icon,
     }
     return data;
 }
@@ -156,18 +153,14 @@ async function getAdvancedWeatherData(processedWeatherData){
     store = advWeatherData;
 
     for (let i = 0; i < hourlyNav.length; i++){
-        console.log("hi")
         hourlyNav[i].addEventListener("click", function(){
             renderHourlyTime(store, this.id);
         },false);
     }
-
     updateCityTime(advWeatherData);
     updateDate(advWeatherData);
     renderDailyForecast(advWeatherData);
     renderHourlyTime(advWeatherData);
-    console.log(advWeatherData)
-
 }
 
 //Gets the names of the next day to display to DOM
@@ -256,6 +249,13 @@ function renderDailyForecast(advWeatherData){
         document.querySelector("#day-6-low").innerHTML = `${Math.round(advWeatherData.daily[6].temp.min * 1.8 + 32)} <sup>°F</sup>`;
         document.querySelector("#day-7-low").innerHTML = `${Math.round(advWeatherData.daily[7].temp.min * 1.8 + 32)} <sup>°F</sup>`;
     }
+    document.getElementById("daily-icon-1").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[1].weather[0].icon}.png`;
+    document.getElementById("daily-icon-2").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[2].weather[0].icon}.png`;
+    document.getElementById("daily-icon-3").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[3].weather[0].icon}.png`;
+    document.getElementById("daily-icon-4").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[4].weather[0].icon}.png`;
+    document.getElementById("daily-icon-5").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[5].weather[0].icon}.png`;
+    document.getElementById("daily-icon-6").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[6].weather[0].icon}.png`;
+    document.getElementById("daily-icon-7").src = `http://openweathermap.org/img/wn/${advWeatherData.daily[7].weather[0].icon}.png`;
 }
 
 function convertTime(unixTime){
@@ -297,7 +297,6 @@ function updateHourlyPage(id) {
 }
 
 function renderHourlyTime(advWeatherData, id = 1){
-    console.log(id);
     updateHourlyPage(id);
     let time = [];
     let temp = [];
@@ -309,6 +308,7 @@ function renderHourlyTime(advWeatherData, id = 1){
     if (pageCount == 1){
         min = 1;
         max = 9;
+        
     }
     else if (pageCount == 2){
         min = 9;
@@ -318,6 +318,8 @@ function renderHourlyTime(advWeatherData, id = 1){
         min = 17;
         max = 25;
     }
+
+    renderHourlyIcon(advWeatherData, min, max);
     
     for (let i = min; i < max; i++){
         p = convertTime(advWeatherData.hourly[i].dt);
@@ -346,37 +348,47 @@ function renderHourlyTime(advWeatherData, id = 1){
     temp = getHourlyTemperature(advWeatherData, min, max);
 
     if (celcius == true){
-        document.querySelector("#temp-1").innerHTML = `${temp[0]} <sup>°C</sup>`
-        document.querySelector("#temp-2").innerHTML = `${temp[1]} <sup>°C</sup>`
-        document.querySelector("#temp-3").innerHTML = `${temp[2]} <sup>°C</sup>`
-        document.querySelector("#temp-4").innerHTML = `${temp[3]} <sup>°C</sup>`
-        document.querySelector("#temp-5").innerHTML = `${temp[4]} <sup>°C</sup>`
-        document.querySelector("#temp-6").innerHTML = `${temp[5]} <sup>°C</sup>`
-        document.querySelector("#temp-7").innerHTML = `${temp[6]} <sup>°C</sup>`
-        document.querySelector("#temp-8").innerHTML = `${temp[7]} <sup>°C</sup>`
+        document.querySelector("#temp-1").innerHTML = `${temp[0]} <sup>°C</sup>`;
+        document.querySelector("#temp-2").innerHTML = `${temp[1]} <sup>°C</sup>`;
+        document.querySelector("#temp-3").innerHTML = `${temp[2]} <sup>°C</sup>`;
+        document.querySelector("#temp-4").innerHTML = `${temp[3]} <sup>°C</sup>`;
+        document.querySelector("#temp-5").innerHTML = `${temp[4]} <sup>°C</sup>`;
+        document.querySelector("#temp-6").innerHTML = `${temp[5]} <sup>°C</sup>`;
+        document.querySelector("#temp-7").innerHTML = `${temp[6]} <sup>°C</sup>`;
+        document.querySelector("#temp-8").innerHTML = `${temp[7]} <sup>°C</sup>`;
     }
     else{
-        document.querySelector("#temp-1").innerHTML = `${Math.round(temp[0] * 1.8 + 32)} <sup>°F</sup>`
-        document.querySelector("#temp-2").innerHTML = `${Math.round(temp[1] * 1.8 + 32)} <sup>°F</sup>`
-        document.querySelector("#temp-3").innerHTML = `${Math.round(temp[2] * 1.8 + 32)} <sup>°F</sup>`
-        document.querySelector("#temp-4").innerHTML = `${Math.round(temp[3] * 1.8 + 32)} <sup>°F</sup>`
-        document.querySelector("#temp-5").innerHTML = `${Math.round(temp[4] * 1.8 + 32)} <sup>°F</sup>`
-        document.querySelector("#temp-6").innerHTML = `${Math.round(temp[5] * 1.8 + 32)} <sup>°F</sup>`
-        document.querySelector("#temp-7").innerHTML = `${Math.round(temp[6] * 1.8 + 32)} <sup>°F</sup>`
-        document.querySelector("#temp-8").innerHTML = `${Math.round(temp[7] * 1.8 + 32)} <sup>°F</sup>`
+        document.querySelector("#temp-1").innerHTML = `${Math.round(temp[0] * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#temp-2").innerHTML = `${Math.round(temp[1] * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#temp-3").innerHTML = `${Math.round(temp[2] * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#temp-4").innerHTML = `${Math.round(temp[3] * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#temp-5").innerHTML = `${Math.round(temp[4] * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#temp-6").innerHTML = `${Math.round(temp[5] * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#temp-7").innerHTML = `${Math.round(temp[6] * 1.8 + 32)} <sup>°F</sup>`;
+        document.querySelector("#temp-8").innerHTML = `${Math.round(temp[7] * 1.8 + 32)} <sup>°F</sup>`;
     }
+}
+
+function renderHourlyIcon(advWeatherData, min, max){
+    let icons = [];
+    for (let i = min; i < max; i++){
+        icons.push(advWeatherData.hourly[i].weather[0].icon)
+    }
+    document.getElementById("hourly-icon-1").src = `http://openweathermap.org/img/wn/${icons[0]}.png`;
+    document.getElementById("hourly-icon-2").src = `http://openweathermap.org/img/wn/${icons[1]}.png`;
+    document.getElementById("hourly-icon-3").src = `http://openweathermap.org/img/wn/${icons[2]}.png`;
+    document.getElementById("hourly-icon-4").src = `http://openweathermap.org/img/wn/${icons[3]}.png`;
+    document.getElementById("hourly-icon-5").src = `http://openweathermap.org/img/wn/${icons[4]}.png`;
+    document.getElementById("hourly-icon-6").src = `http://openweathermap.org/img/wn/${icons[5]}.png`;
+    document.getElementById("hourly-icon-7").src = `http://openweathermap.org/img/wn/${icons[6]}.png`;
+    document.getElementById("hourly-icon-8").src = `http://openweathermap.org/img/wn/${icons[7]}.png`;
 }
 
 function getHourlyTemperature(advWeatherData, min, max){
     let temp = [];
-    console.log(min)
-    console.log(max)
-   
     for (let i = min; i < max; i++){
-        console.log("asdasd")
         temp.push(Math.round(advWeatherData.hourly[i].temp));
     }
-
     return temp;
 }
 
@@ -394,4 +406,5 @@ function displayData(weatherData){
     document.querySelector(".wind-speed").textContent = `Wind: ${weatherData.windSpeed} m/s`;
     document.querySelector(".location").textContent = `${weatherData.cityName}, ${weatherData.country}`;
     document.querySelector(".description").textContent = weatherData.condition;
+    document.getElementById("main-icon").src = `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png`;
 }

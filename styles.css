@@ -53,6 +53,14 @@ body{
     font-size: 40px;
 }
 
+.main-icon{
+    display: inline;
+    float: right;
+    margin-top: -20px;
+    margin-right: 500px;
+    height: 150%;
+}
+
 .weather-temperature{
     display: inline-block;
     margin-left: 200px;
@@ -137,6 +145,10 @@ body{
 
 .daily-low{
     margin-top: 10px;
+}
+
+.daily-icon{
+    margin-left: -60px;
 }
 
 .hourly{
