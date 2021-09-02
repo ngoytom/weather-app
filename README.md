@@ -26,6 +26,6 @@ Weather App that uses OpenWeatherMap API specifically the Current Weather API an
 - User location set as default
 
 ## Live Demonstration
-
+![UI of app](https://github.com/ngoytom/weather-app/blob/main/weather.JPG?raw=true)
 
 
